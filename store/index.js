@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 // import axios from 'axios'
-// import fb from './firebaseConfig.js'
+import fb from '@/services/firebaseConfig.js'
 
 // Vue.use(Vuex)
 
