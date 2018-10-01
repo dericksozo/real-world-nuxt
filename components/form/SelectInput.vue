@@ -1,11 +1,11 @@
 <template>
   <Field :label="label">
-    <select :value="value" 
-            @change="updateValue" 
+    <select :value="value"
+            @change="updateValue"
             v-bind="$attrs">
       <option disabled selected value></option>
       <option v-for="option in options"
-              :value="option" 
+              :value="option"
               :key="option">
               {{ option }}
       </option>
@@ -19,11 +19,15 @@
 
 <script>
 import inputFieldMixin from '@/mixins/inputFieldMixin'
+import Field from '@/form/Field';
 
 export default {
   name: 'SelectInput',
   mixins: [inputFieldMixin],
   inheritAttrs: false,
+  components: {
+    Field
+  },
   props: {
     options: {
       type: Array,

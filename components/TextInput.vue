@@ -13,10 +13,14 @@
 
 <script>
 import inputFieldMixin from '@/mixins/inputFieldMixin'
+import Field from '@/components/form/Field'
 
 export default {
   name: 'TextInput',
   mixins: [inputFieldMixin],
+  components: {
+    Field
+  }
   inheritAttrs: false
 }
 </script>
