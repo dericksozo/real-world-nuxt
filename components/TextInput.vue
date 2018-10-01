@@ -20,7 +20,7 @@ export default {
   mixins: [inputFieldMixin],
   components: {
     Field
-  }
+  },
   inheritAttrs: false
 }
 </script>
