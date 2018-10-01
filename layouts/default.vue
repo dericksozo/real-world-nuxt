@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
-    <NavBar/>
-    <nuxt/>
+  <div id='app'>
+    <NavBar />
+    <nuxt />
+    <!-- <NotificationContainer/> -->
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
+// import NotificationContainer from '@/components/notifications/NotificationContainer.vue'
 
 export default {
   components: {
-    NavBar
+    NavBar,
+    // NotificationContainer
   }
 }
 </script>
