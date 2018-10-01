@@ -9,9 +9,13 @@
 </template>
 
 <script>
+import BaseIcon from '@/components/BaseIcon'
 export default {
   props: {
     event: Object
+  },
+  components: {
+    BaseIcon
   }
 }
 </script>
