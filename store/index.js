@@ -78,9 +78,21 @@ const createStore = () => {
           })
           .catch(error => console.log(error))
       },
-      userLogin(context, form) {
+      userLogin({ commit }, form) {
         fb.auth
           .signInWithEmailAndPassword(form.email, form.password)
+          .then( user => {
+
+            console.log("logged in user", user)
+
+            const loggedInUser = {
+              id: user.user.uid,
+              name: user.user.displayName
+            }
+
+            commit('SET_USER', loggedInUser)
+
+          })
           .catch(error => console.log(error))
       },
       userLogout() {
