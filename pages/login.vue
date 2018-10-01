@@ -63,8 +63,16 @@
 </template>
 
 <script>
+
+import TextInput from '@/components/TextInput'
+import Button from '@/components/Button'
+
 export default {
   name: 'login',
+  components: {
+    TextInput,
+    Button
+  },
   data() {
     return {
       loginForm: {
