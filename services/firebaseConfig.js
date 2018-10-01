@@ -10,7 +10,16 @@ const config = {
   storageBucket: "real-world-nuxt.appspot.com",
   messagingSenderId: "828644795313"
 };
-firebase.initializeApp(config)
+
+try {
+  firebase.initializeApp(config)
+} catch (err) {
+  // we skip the "already exists" message which is
+  // not an actual error when we're hot-reloading
+  if (!/already exists/.test(err.message)) {
+    console.error('Firebase initialization error', err.stack)
+  }
+}
 
 // firebase utils
 const db = firebase.firestore()
