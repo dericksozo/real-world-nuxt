@@ -95,7 +95,8 @@ const createStore = () => {
           })
           .catch(error => console.log(error))
       },
-      userLogout() {
+      userLogout({ commit }) {
+        commit('SET_USER', null)
         return fb.auth.signOut()
       }
     }
