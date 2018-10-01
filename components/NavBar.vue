@@ -1,15 +1,32 @@
 <template>
   <div id="nav" class="nav">
-    <nuxt-link to="/" class="brand">Real World Events</nuxt-link>
+    <router-link to="/" class="brand">Vue World</router-link>
     <nav>
-      <nuxt-link to="/">List</nuxt-link> |
-      <nuxt-link to="/event/create">Create</nuxt-link>
+      <router-link to="/" class="nav-item">Events</router-link>
+      <router-link to="/create" class="nav-item">Create an Event</router-link>
+      <router-link v-if="!loggedIn" to="/login">Login / Sign Up</router-link>
+      <a v-else @click="logout">Log Out</a>
     </nav>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  name: 'NavBar',
+  computed: {
+    loggedIn() {
+      if (this.$store.state.user !== null) {
+        return true
+      }
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('userLogout')
+      this.$router.push('/login')
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -23,7 +40,6 @@ export default {}
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 1.5em;
-  color: #39b982;
   text-decoration: none;
 }
 .nav .nav-item {
