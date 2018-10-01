@@ -37,10 +37,25 @@ export default {
 
   },
 
+  created() {
+    console.log("this.event", this.event);
+  },
+
   data() {
     return {
       event: {}
     }
+  },
+
+  head() {
+    return {
+      title: this.event.title,
+      titleTemplate: "%s - real-world-nuxt",
+      meta: [
+        { hid: 'description', name: 'description', content: this.event.description },
+        { hid: 'dc-date', name: 'DC.date', content: this.event.time, scheme: 'W3CDTF' }
+      ]
+    };
   }
 }
 </script>
