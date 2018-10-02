@@ -12,6 +12,7 @@ export default {
   name: 'Create',
   components: {
     Form
-  }
+  },
+  middlware: ['authenticate']
 }
 </script>
