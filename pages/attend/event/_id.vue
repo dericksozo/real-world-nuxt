@@ -73,6 +73,9 @@ const MONTHS = [
 ]
 
 export default {
+
+  middleware: ['authenticate'],
+  
   components: {
     MetaField,
     MediaBlock,
