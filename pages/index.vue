@@ -36,14 +36,12 @@
 </template>
 
 <script>
-import EventCard from '@/components/events/EventCard.vue'
 import EventList from '@/components/events/EventList.vue'
 import TabItem from '@/components/TabItem.vue'
 
 export default {
   name: 'Events',
   components: {
-    EventCard,
     EventList,
     TabItem
   },
