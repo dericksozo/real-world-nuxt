@@ -36,17 +36,25 @@ export default {
       type: String,
       required: true
     },
-    date: [Object], //fix this format
+    date: [String, Object], //fix this format
     title: String,
     id: [String, Number],
     attendees: [Array, Object]
   },
   computed: {
     parsedDate() {
-      const eventDate = new Date(this.date.seconds * 1000)
-      return `${
-        MONTHS[eventDate.getMonth() - 1]
-      } ${eventDate.getDay()}, ${eventDate.getFullYear()}`
+
+      let eventDate;
+
+      if (typeof this.date === "string") {
+        return this.date;
+      } else {
+        eventDate = new Date(this.date.seconds * 1000);
+        return `${
+          MONTHS[eventDate.getMonth() - 1]
+        } ${eventDate.getDay()}, ${eventDate.getFullYear()}`
+      }
+
     }
   },
   methods: {
