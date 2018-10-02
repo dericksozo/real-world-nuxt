@@ -19,7 +19,7 @@
 
 <script>
 import inputFieldMixin from '@/mixins/inputFieldMixin'
-import Field from '@/form/Field';
+import Field from '@/components/form/Field';
 
 export default {
   name: 'SelectInput',

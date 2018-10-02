@@ -50,17 +50,19 @@
 </template>
 
 <script>
-import SelectInput from './SelectInput.vue'
+import SelectInput from '@/components/form/SelectInput.vue'
 import Datepicker from 'vuejs-datepicker'
 import Snackbar from '@/components/Snackbar.vue'
 import Field from '@/components/form/Field.vue'
-import fb from '@/firebaseConfig.js'
+import TextInput from '@/components/TextInput.vue'
+import fb from '@/services/firebaseConfig.js'
 
 export default {
   components: {
     SelectInput,
     Datepicker,
     Field,
+    TextInput,
     Snackbar
   },
   data() {
