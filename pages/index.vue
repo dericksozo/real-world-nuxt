@@ -36,14 +36,16 @@
 </template>
 
 <script>
-import EventList from '@/components/events/EventList.vue'
+import TextInput from '@/components/TextInput.vue'
+import EventList from '@/components/EventList.vue'
 import TabItem from '@/components/TabItem.vue'
 
 export default {
   name: 'Events',
   components: {
     EventList,
-    TabItem
+    TabItem,
+    TextInput
   },
   data() {
     return {
