@@ -17,8 +17,13 @@
 </template>
 
 <script>
-import EventCard from '@/components/events/EventCard.vue'
-import Velocity from 'velocity-animate'
+import EventCard from '@/components/EventCard.vue'
+
+let Velocity = null;
+
+if (process.browser) {
+  Velocity = require('velocity-animate')
+}
 
 export default {
   name: 'EventList',
@@ -38,12 +43,20 @@ export default {
       // Stagger entrance (especially for onload)
       var delay = el.dataset.index * 150
       setTimeout(() => {
-        Velocity(el, { opacity: 1, translateX: '0' }, { complete: done })
+
+        if (Velocity) {
+          Velocity(el, { opacity: 1, translateX: '0' }, { complete: done })
+        }
+
       }, delay)
     },
     leave(el, done) {
-      // Leave to the right (not staggered, looks buggy)
-      Velocity(el, { opacity: 0, translateX: '50px' }, { complete: done })
+
+      if (Velocity) {
+        // Leave to the right (not staggered, looks buggy)
+        Velocity(el, { opacity: 0, translateX: '50px' }, { complete: done })
+      }
+
     }
   }
 }
