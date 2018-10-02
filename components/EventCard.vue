@@ -1,26 +1,61 @@
 <template>
-  <nuxt-link class="event-link" :to="`/event/${event.id}`">
-    <div class="event-card -shadow">
-      <span class="eyebrow">@{{ event.time }} on {{ event.date }}</span>
-      <h4 class="title">{{ event.title }}</h4>
-      <BaseIcon name="users">{{ event.attendees.length }} attending</BaseIcon>
-    </div>
-  </nuxt-link>
+  <div @click="expandEvent(id)" class="event-card -shadow">
+    <span class="eyebrow">@{{ time }} on {{ parsedDate }}</span>
+   <h4 class="title">{{ title }}</h4>
+   <meta-field iconName="users">{{ attendees.length }} attending</meta-field>
+  </div>
 </template>
 
 <script>
-import BaseIcon from '@/components/BaseIcon'
+import MetaField from '@/components/MetaField'
+
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
 export default {
-  props: {
-    event: Object
-  },
+  name: 'EventCard',
   components: {
-    BaseIcon
+    MetaField
+  },
+  props: {
+    time: {
+      type: String,
+      required: true
+    },
+    date: [Object], //fix this format
+    title: String,
+    id: [String, Number],
+    attendees: [Array, Object]
+  },
+  computed: {
+    parsedDate() {
+      const eventDate = new Date(this.date.seconds * 1000)
+      return `${
+        MONTHS[eventDate.getMonth() - 1]
+      } ${eventDate.getDay()}, ${eventDate.getFullYear()}`
+    }
+  },
+  methods: {
+    expandEvent(id) {
+      this.$router.push({ name: 'attend', params: { id } })
+    }
   }
 }
 </script>
 
-<style scoped>
+<style>
 .event-card {
   padding: 20px;
   margin-bottom: 24px;
@@ -33,10 +68,5 @@ export default {
 }
 .event-card > .title {
   margin: 0;
-}
-.event-link {
-  color: black;
-  text-decoration: none;
-  font-weight: 100;
 }
 </style>
