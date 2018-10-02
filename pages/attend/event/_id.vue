@@ -1,66 +1,170 @@
 <template>
   <div>
-    <div class="event-header">
-      <span class="eyebrow">@{{ event.time }} on {{ event.date }}</span>
-      <h1 class="title">{{ event.title }}</h1>
-      <h5>Organized by {{ event.organizer }}</h5>
-      <h5>Category: {{ event.category }}</h5>
+    <div v-if="!event">
+      <p>Loading...</p>
     </div>
+    <div v-else>
+      <div v-if="this.event.organizer.name !== this.$store.state.user.name" class="prompt-box -shadow">
+        <h3 class="title">Are you going?
+          <MetaField iconName="users">{{ event.attendees.length }} attending</MetaField></h3>
 
-    <BaseIcon name="map"><h2>Location</h2></BaseIcon>
+        <div class="actions">
+          <transition mode="in-out">
+            <Button v-if="attend" class="-text-primary -icon-left" disabled>
+              <icon name="check-circle"/> Attending</Button>
+            <Button v-else @click="addAttendee" class="-fill-gradient">Yes</Button>
+          </transition>
 
-    <address>{{ event.location }}</address>
+          <transition mode="in-out">
+            <Button v-if="notattend" class="-text-error -icon-left" disabled>
+              <Icon name="x-circle"/> Not Attending</Button>
+            <Button v-else @click="notAttending" class="-fill-gray">No</Button>
+          </transition>
+        </div>
+      </div>
 
-    <h2>Event details</h2>
-    <p>{{ event.description }}</p>
+      <div class="event-header">
+        <span class="eyebrow">@{{ event.time }} on {{ date }}</span>
+        <h1 class="title">{{ event.title }}</h1>
+        <media-block>
+          <h5 slot="header">Organized by {{ event.organizer.name }}</h5>
+          <MetaField slot="paragraph" iconName="tag">Category: {{ event.category }}</MetaField>
+        </media-block>
+      </div>
 
-    <h2>Attendees
-      <span class="badge -fill-gradient">{{ event.attendees ? event.attendees.length : 0 }}</span>
-    </h2>
-    <ul class="list-group">
-      <li v-for="(attendee, index) in event.attendees" :key="index" class="list-item">
-        <b>{{ attendee.name }}</b>
-      </li>
-    </ul>
-  </div>
+      <h3 class="location">Location <Icon name="map" /></h3>
+      <address>{{ event.location }}</address>
+
+      <h2>Event details</h2>
+      <p>{{ event.description }}</p>
+
+      <h2>Attendees
+        <span class="badge -fill-gradient">{{ event.attendees.length }}</span>
+      </h2>
+      <ul class="list-group">
+        <li v-for="(attendee, index) in event.attendees" :key="index" class="list-item">
+          <b>{{ attendee.name }}</b>
+        </li>
+      </ul>
+      </div>
+    </div>
 </template>
+
 <script>
+import MetaField from '@/components/MetaField'
+import MediaBlock from '@/components/MediaBlock'
+import Button from '@/components/Button'
+import Icon from '@/components/Icon'
+import fb from '@/services/firebaseConfig.js'
+
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
 export default {
-
-  async asyncData ({ app, params }) {
-    const { events } = await app.$axios.$get(`/db.json`);
-
-    // Doing this to offset what's in the JSON file from what's displayed in the URL.
-    const properId = params.id - 1;
-
-    return { event: events[properId] };
-
+  components: {
+    MetaField,
+    MediaBlock,
+    Button,
+    Icon
   },
-
-  created() {
-    console.log("this.event", this.event);
-  },
-
   data() {
     return {
-      event: {}
+      event: null,
+      docRef: null,
+      attend: false,
+      notattend: false,
+      showPrompt: true
     }
   },
+  created() {
+    var docRef = fb.eventsCollection.doc(this.$route.params.id)
+    this.docRef = docRef
 
-  head() {
-    return {
-      title: this.event.title,
-      titleTemplate: "%s - real-world-nuxt",
-      meta: [
-        { hid: 'description', name: 'description', content: this.event.description },
-        { hid: 'dc-date', name: 'DC.date', content: this.event.time, scheme: 'W3CDTF' }
-      ]
-    };
+    docRef
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          this.event = doc.data()
+          console.log("this.event", this.event);
+        } else {
+          console.log('No such document!')
+        }
+      })
+      .catch(error => {
+        console.log('Error getting document:', error)
+      })
+  },
+  computed: {
+    // parsedDate() {
+    //   const eventDate = new Date(this.event.date.seconds * 1000)
+    //   return `${
+    //     MONTHS[eventDate.getMonth() - 1]
+    //   } ${eventDate.getDay()}, ${eventDate.getFullYear()}`
+    // }
+  },
+  methods: {
+    addAttendee() {
+      const user = this.$store.state.user
+      const newAttendees = this.event.attendees
+      newAttendees.push(user)
+
+      this.docRef.set({ attendees: newAttendees }, { merge: true })
+
+      this.event.attendees = newAttendees
+
+      this.attend = true
+      this.notattend = false
+    },
+    notAttending() {
+      this.notattend = true
+      this.attend = false
+    }
+    // If you choose to hide prompt after selecting an answer
+    // hidePrompt() {
+    //   setTimeout(() => {
+    //     this.showPrompt = false
+    //   }, 400)
+    // }
   }
 }
 </script>
 
 <style scoped>
+.prompt-box {
+  position: relative;
+  overflow: hidden;
+  padding: 1em;
+  margin-bottom: 24px;
+  transform: scaleY(1);
+}
+.prompt-box > .title {
+  margin: 0 0 0.5em;
+}
+.prompt-box > .title > .meta {
+  margin-left: 10px;
+}
+.prompt-box > .actions {
+  display: flex;
+  align-items: center;
+}
+.prompt-box > button {
+  margin-right: 0.5em;
+}
+.prompt-box > button:last-of-type {
+  margin-right: 0;
+}
 .location {
   margin-bottom: 0;
 }
