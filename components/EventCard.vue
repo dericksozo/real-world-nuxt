@@ -1,9 +1,11 @@
 <template>
-  <div @click="expandEvent(id)" class="event-card -shadow">
-    <span class="eyebrow">@{{ time }} on {{ parsedDate }}</span>
-   <h4 class="title">{{ title }}</h4>
-   <meta-field iconName="users">{{ attendees.length }} attending</meta-field>
-  </div>
+  <nuxt-link :to="'/attend/event/' + id">
+    <div class="event-card -shadow">
+      <span class="eyebrow">@{{ time }} on {{ parsedDate }}</span>
+     <h4 class="title">{{ title }}</h4>
+     <meta-field iconName="users">{{ attendees.length }} attending</meta-field>
+    </div>
+  </nuxt-link>
 </template>
 
 <script>
