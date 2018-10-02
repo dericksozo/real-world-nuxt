@@ -8,8 +8,13 @@
 </template>
 
 <script>
+import Icon from '@/components/Icon.vue'
+
 export default {
   name: 'tab',
+  components: {
+    Icon
+  },
   props: {
     iconName: String
   }
