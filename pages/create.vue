@@ -9,10 +9,9 @@
 import Form from '@/components/form/Form.vue'
 
 export default {
-  name: 'Create',
+  middleware: ['authenticate'],
   components: {
     Form
   },
-  middlware: ['authenticate']
 }
 </script>
